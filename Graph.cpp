@@ -44,6 +44,7 @@ bool Graph :: isConnected (){
 std::vector<std::vector<int>> Graph :: getMatrix(){
     return this->ourGraph;
 }
+// returns the pair of the edge
 std::vector<std::pair<size_t, size_t>> Graph :: getEdges()  {
             std::vector<std::pair<size_t, size_t>> edges;
             size_t numVertices = this->ourGraph.size();
