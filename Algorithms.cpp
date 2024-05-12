@@ -19,6 +19,7 @@ bool Algorithms :: isConnected( Graph g){
     return true ;
 }
 bool containsNumber(const std::stack<size_t>& stack, int target) {
+    
     std::stack<size_t> temp = stack; 
     while (!temp.empty()) {
         if (temp.top() == target) {
@@ -55,6 +56,7 @@ bool Algorithms :: isContainsCycle(Graph g ){
     visited[0] = true;
     stuck.push(0);
     bool iscontains =true;
+    // dfs
     while (!stuck.empty()) {
         size_t currentVertex = stuck.top();
         stuck.pop();
@@ -63,6 +65,7 @@ bool Algorithms :: isContainsCycle(Graph g ){
                     if( !visited[i]){
                     visited[i] = true;
                     stuck.push(i);}
+                    // based on the dfs algorithem 
                     else{
                         if (containsNumber(stuck,i)) return true;
                     }
@@ -127,7 +130,6 @@ bool Algorithms :: isContainsCycle(Graph g ){
         string path = ss.str();
         reverse(path.begin(), path.end());
 
-        // Return the shortest path
         return  path;
     }
 bool Algorithms :: isNegativeCycle(Graph g){
@@ -156,7 +158,6 @@ string Algorithms:: isBipartite(Graph g)  {
                 size_t u = q.front();
                 q.pop();
 
-                // Find all non-colored adjacent vertices
                 for (size_t v = 0; v < V; ++v) {
                     // An edge exists and destination is not colored
                     if (g.getMatrix()[u][v] && color[v] == -1) {
