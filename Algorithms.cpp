@@ -50,39 +50,47 @@ bool containsNumber(const std::stack<size_t>& stack, int target) {
         
         return visited ;
     }
-bool Algorithms :: isContainsCycle(Graph g ){
-    std::vector<bool> visited(g.getMatrix().size(), false);
-    std:: stack <size_t> stuck ;
-    visited[0] = true;
-    stuck.push(0);
-    bool iscontains =true;
-    // dfs
-    while (!stuck.empty()) {
-        size_t currentVertex = stuck.top();
-        stuck.pop();
-            for (size_t i = 0; i < g.getMatrix().size(); i++) {
-                if (g.getMatrix()[currentVertex][i] != 0) {
-                    if( !visited[i]){
-                    visited[i] = true;
-                    stuck.push(i);}
-                    // based on the dfs algorithem 
-                    else{
-                        if (containsNumber(stuck,i)) return true;
+    static bool dfs( Graph& g, size_t v, std::vector<bool>& visited, std::vector<int>& recStack, int parent, int depth) {
+            visited[v] = true;
+            recStack[v] = depth;
+
+            for (size_t i = 0; i < g.getMatrix().size(); ++i) {
+                if (g.getMatrix()[v][i] != 0) {
+                    if (!visited[i]) {
+                        if (dfs(g, i, visited, recStack, v, depth + 1)) {
+                            return true;
+                        }
+                    } else if (i != parent && (depth - recStack[i] >= 2)) {
+                        return true; // Found a cycle with at least three edges
                     }
                 }
             }
-        if (stuck.empty()){
-            for (size_t i=0; i<visited.size();i++){
-                if (visited[i]==false) {
-                    stuck.push(i);
-                    break ;} 
+
+            recStack[v] = -1;
+            return false;
+        }
+ bool Algorithms :: isContainsCycle(Graph g) {
+            size_t numVertices = g.getMatrix().size();
+            std::vector<bool> visited(numVertices, false);
+            std::vector<int> recStack(numVertices, -1); // Store parent vertices to determine cycle length
+
+            for (size_t startVertex = 0; startVertex < numVertices; ++startVertex) {
+                if (!visited[startVertex]) {
+                    if (dfs(g, startVertex, visited, recStack, -1, 0)) {
+                        return true;
+                    }
+                }
             }
+
+            return false;
         }
-        }
-    
-        return false ;
+
         
-}
+    
+
+
+    
+
 
     string Algorithms::shortestPath(Graph g, size_t source, size_t destination) {
         // Number of vertices in the graph
@@ -207,7 +215,6 @@ string Algorithms:: isBipartite(Graph g)  {
 
 
     
-
 
 
 
